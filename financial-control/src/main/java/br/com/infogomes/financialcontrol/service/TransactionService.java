@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import br.com.infogomes.financialcontrol.entities.Transaction;
 import br.com.infogomes.financialcontrol.entities.enuns.TipoTransaction;
 import br.com.infogomes.financialcontrol.repositories.TransactionRepository;
+import br.com.infogomes.financialcontrol.service.exceptions.ObjectNotFoundException;
 
 @Service
 public class TransactionService {
@@ -25,14 +26,18 @@ public class TransactionService {
 	}
 
 	public Transaction findIncome(Long id) {
-		return repository.findById(id).get();
+		return repository.findById(id).orElseThrow(() -> new ObjectNotFoundException(
+				"Objeto não encontrado! Id: " + id + ", Tipo: " + Transaction.class.getName()));
 	}
 
 	public Transaction updateIncome(Transaction obj) {
+		obj.setTipoTransaction(TipoTransaction.INCOME);
+		findIncome(obj.getId());
 		return repository.save(obj);
 	}
 
 	public void deleteIncome(Long id) {
+		findIncome(id);
 		repository.deleteById(id);
 	}
 
