@@ -48,6 +48,37 @@ public class TransactionService {
 		findIncome(id);
 		repository.deleteById(id);
 	}
+	
+	public List<Transaction> findAllExpenses() {
+		return repository.findByTipoTransaction(TipoTransaction.EXPENSE);
+	}
+
+	public Transaction insertExpense(Transaction obj) {
+		obj.setTipoTransaction(TipoTransaction.EXPENSE);
+		if (existsTransaction(obj)) {
+			throw new ObjectExistsException("Objeto já existe no mês informado! Tipo: " + Transaction.class.getName());
+		}
+		return repository.save(obj);
+	}
+
+	public Transaction findExpense(Long id) {
+		return repository.findById(id).orElseThrow(() -> new ObjectNotFoundException(
+				"Objeto não encontrado! Id: " + id + ", Tipo: " + Transaction.class.getName()));
+	}
+
+	public Transaction updateExpense(Transaction obj) {
+		obj.setTipoTransaction(TipoTransaction.EXPENSE);
+		findExpense(obj.getId());
+		if (existsTransaction(obj)) {
+			throw new ObjectExistsException("Objeto já existe no mês informado! Tipo: " + Transaction.class.getName());
+		}
+		return repository.save(obj);
+	}
+
+	public void deleteExpense(Long id) {
+		findExpense(id);
+		repository.deleteById(id);
+	}
 
 	public boolean existsByDescriptionIgnoreCaseAndTransDateGreaterThanEqualAndTransDateLessThan(String description,
 			LocalDate startDate, LocalDate endDate) {

@@ -68,8 +68,51 @@ public class TransactionResource {
 	}
 
 	@DeleteMapping(value = "receitas/{id}")
-	public ResponseEntity<Void> delete(@PathVariable Long id) {
+	public ResponseEntity<Void> deleteIncome(@PathVariable Long id) {
 		service.deleteIncome(id);
+		return ResponseEntity.noContent().build();
+	}
+	
+	@GetMapping(value = "despesas")
+	public ResponseEntity<List<TransactionDTO>> findAllExpenses() {
+		List<Transaction> list = service.findAllExpenses();
+		List<TransactionDTO> listDto = list.stream().map(obj -> {
+			var dto = new TransactionDTO();
+			BeanUtils.copyProperties(obj, dto);
+			return dto;
+		}).collect(Collectors.toList());
+		return ResponseEntity.ok().body(listDto);
+	}
+
+	@PostMapping(value = "despesas")
+	public ResponseEntity<Void> insertExpense(@Valid @RequestBody TransactionDTO objDto) {
+		var obj = new Transaction();
+		BeanUtils.copyProperties(objDto, obj);
+		obj = service.insertExpense(obj);
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
+		return ResponseEntity.created(uri).build();
+	}
+
+	@GetMapping(value = "despesas/{id}")
+	public ResponseEntity<TransactionDTO> findExpense(@PathVariable Long id) {
+		Transaction obj = service.findExpense(id);
+		var dto = new TransactionDTO();
+		BeanUtils.copyProperties(obj, dto);
+		return ResponseEntity.ok().body(dto);
+	}
+
+	@PutMapping(value = "despesas/{id}")
+	public ResponseEntity<Void> updateExpense(@Valid @RequestBody TransactionDTO objDto, @PathVariable Long id) {
+		var obj = new Transaction();
+		objDto.setId(id);
+		BeanUtils.copyProperties(objDto, obj);
+		obj = service.updateExpense(obj);
+		return ResponseEntity.noContent().build();
+	}
+
+	@DeleteMapping(value = "despesas/{id}")
+	public ResponseEntity<Void> deleteExpense(@PathVariable Long id) {
+		service.deleteExpense(id);
 		return ResponseEntity.noContent().build();
 	}
 
