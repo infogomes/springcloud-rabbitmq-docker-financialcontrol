@@ -31,8 +31,9 @@ public class TransactionService {
 	}
 
 	public Transaction findIncome(Long id) {
-		return repository.findById(id).orElseThrow(() -> new ObjectNotFoundException(
-				"Objeto não encontrado! Id: " + id + ", Tipo: " + Transaction.class.getName()));
+		return repository.findByIdAndTipoTransactionEquals(id, TipoTransaction.INCOME)
+				.orElseThrow(() -> new ObjectNotFoundException(
+						"Objeto não encontrado! Id: " + id + ", Tipo: " + Transaction.class.getName()));
 	}
 
 	public Transaction updateIncome(Transaction obj) {
@@ -48,7 +49,7 @@ public class TransactionService {
 		findIncome(id);
 		repository.deleteById(id);
 	}
-	
+
 	public List<Transaction> findAllExpenses() {
 		return repository.findByTipoTransaction(TipoTransaction.EXPENSE);
 	}
@@ -62,8 +63,9 @@ public class TransactionService {
 	}
 
 	public Transaction findExpense(Long id) {
-		return repository.findById(id).orElseThrow(() -> new ObjectNotFoundException(
-				"Objeto não encontrado! Id: " + id + ", Tipo: " + Transaction.class.getName()));
+		return repository.findByIdAndTipoTransactionEquals(id, TipoTransaction.EXPENSE)
+				.orElseThrow(() -> new ObjectNotFoundException(
+						"Objeto não encontrado! Id: " + id + ", Tipo: " + Transaction.class.getName()));
 	}
 
 	public Transaction updateExpense(Transaction obj) {
@@ -90,6 +92,11 @@ public class TransactionService {
 		return existsByDescriptionIgnoreCaseAndTransDateGreaterThanEqualAndTransDateLessThan(obj.getDescription(),
 				LocalDate.of(obj.getTransDate().getYear(), obj.getTransDate().getMonthValue(), 1),
 				LocalDate.of(obj.getTransDate().getYear(), obj.getTransDate().getMonthValue() + 1, 1));
+	}
+
+	public List<Transaction> findExpensesByDescriptionContaining(String description) {
+		return repository.findExpensesByDescriptionContainingAndTipoTransactionEquals(description,
+				TipoTransaction.EXPENSE);
 	}
 
 }

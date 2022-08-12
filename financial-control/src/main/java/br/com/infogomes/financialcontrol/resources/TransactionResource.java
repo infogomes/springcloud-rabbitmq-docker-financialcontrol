@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -72,10 +73,22 @@ public class TransactionResource {
 		service.deleteIncome(id);
 		return ResponseEntity.noContent().build();
 	}
-	
+
 	@GetMapping(value = "expenses")
 	public ResponseEntity<List<TransactionDTO>> findAllExpenses() {
 		List<Transaction> list = service.findAllExpenses();
+		List<TransactionDTO> listDto = list.stream().map(obj -> {
+			var dto = new TransactionDTO();
+			BeanUtils.copyProperties(obj, dto);
+			return dto;
+		}).collect(Collectors.toList());
+		return ResponseEntity.ok().body(listDto);
+	}
+
+	@GetMapping(value = "expenses", params = "description")
+	public ResponseEntity<List<TransactionDTO>> findExpensesByDescription(
+			@RequestParam(name = "description") String description) {
+		List<Transaction> list = service.findExpensesByDescriptionContaining(description);
 		List<TransactionDTO> listDto = list.stream().map(obj -> {
 			var dto = new TransactionDTO();
 			BeanUtils.copyProperties(obj, dto);

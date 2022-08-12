@@ -2,6 +2,7 @@ package br.com.infogomes.financialcontrol.repositories;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -16,5 +17,10 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
 
 	boolean existsByDescriptionIgnoreCaseAndTransDateGreaterThanEqualAndTransDateLessThan(String description,
 			LocalDate startDate, LocalDate endDate);
+
+	List<Transaction> findExpensesByDescriptionContainingAndTipoTransactionEquals(String description,
+			TipoTransaction expense);
+
+	Optional<Transaction> findByIdAndTipoTransactionEquals(Long id, TipoTransaction expense);
 
 }
