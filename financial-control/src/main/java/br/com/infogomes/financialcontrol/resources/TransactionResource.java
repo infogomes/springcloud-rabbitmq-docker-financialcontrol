@@ -30,7 +30,7 @@ public class TransactionResource {
 	@Autowired
 	private TransactionService service;
 
-	@GetMapping(value = "receitas")
+	@GetMapping(value = "incomes")
 	public ResponseEntity<List<TransactionDTO>> findAllIncome() {
 		List<Transaction> list = service.findAllIncomes();
 		List<TransactionDTO> listDto = list.stream().map(obj -> {
@@ -41,7 +41,7 @@ public class TransactionResource {
 		return ResponseEntity.ok().body(listDto);
 	}
 
-	@PostMapping(value = "receitas")
+	@PostMapping(value = "incomes")
 	public ResponseEntity<Void> insertIncome(@Valid @RequestBody TransactionDTO objDto) {
 		var obj = new Transaction();
 		BeanUtils.copyProperties(objDto, obj);
@@ -50,7 +50,7 @@ public class TransactionResource {
 		return ResponseEntity.created(uri).build();
 	}
 
-	@GetMapping(value = "receitas/{id}")
+	@GetMapping(value = "incomes/{id}")
 	public ResponseEntity<TransactionDTO> find(@PathVariable Long id) {
 		Transaction obj = service.findIncome(id);
 		var dto = new TransactionDTO();
@@ -58,7 +58,7 @@ public class TransactionResource {
 		return ResponseEntity.ok().body(dto);
 	}
 
-	@PutMapping(value = "receitas/{id}")
+	@PutMapping(value = "incomes/{id}")
 	public ResponseEntity<Void> updateIncome(@Valid @RequestBody TransactionDTO objDto, @PathVariable Long id) {
 		var obj = new Transaction();
 		objDto.setId(id);
@@ -67,13 +67,13 @@ public class TransactionResource {
 		return ResponseEntity.noContent().build();
 	}
 
-	@DeleteMapping(value = "receitas/{id}")
+	@DeleteMapping(value = "incomes/{id}")
 	public ResponseEntity<Void> deleteIncome(@PathVariable Long id) {
 		service.deleteIncome(id);
 		return ResponseEntity.noContent().build();
 	}
 	
-	@GetMapping(value = "despesas")
+	@GetMapping(value = "expenses")
 	public ResponseEntity<List<TransactionDTO>> findAllExpenses() {
 		List<Transaction> list = service.findAllExpenses();
 		List<TransactionDTO> listDto = list.stream().map(obj -> {
@@ -84,7 +84,7 @@ public class TransactionResource {
 		return ResponseEntity.ok().body(listDto);
 	}
 
-	@PostMapping(value = "despesas")
+	@PostMapping(value = "expenses")
 	public ResponseEntity<Void> insertExpense(@Valid @RequestBody TransactionDTO objDto) {
 		var obj = new Transaction();
 		BeanUtils.copyProperties(objDto, obj);
@@ -93,7 +93,7 @@ public class TransactionResource {
 		return ResponseEntity.created(uri).build();
 	}
 
-	@GetMapping(value = "despesas/{id}")
+	@GetMapping(value = "expenses/{id}")
 	public ResponseEntity<TransactionDTO> findExpense(@PathVariable Long id) {
 		Transaction obj = service.findExpense(id);
 		var dto = new TransactionDTO();
@@ -101,7 +101,7 @@ public class TransactionResource {
 		return ResponseEntity.ok().body(dto);
 	}
 
-	@PutMapping(value = "despesas/{id}")
+	@PutMapping(value = "expenses/{id}")
 	public ResponseEntity<Void> updateExpense(@Valid @RequestBody TransactionDTO objDto, @PathVariable Long id) {
 		var obj = new Transaction();
 		objDto.setId(id);
@@ -110,7 +110,7 @@ public class TransactionResource {
 		return ResponseEntity.noContent().build();
 	}
 
-	@DeleteMapping(value = "despesas/{id}")
+	@DeleteMapping(value = "expenses/{id}")
 	public ResponseEntity<Void> deleteExpense(@PathVariable Long id) {
 		service.deleteExpense(id);
 		return ResponseEntity.noContent().build();
