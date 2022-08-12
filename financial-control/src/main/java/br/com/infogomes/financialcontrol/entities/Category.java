@@ -1,31 +1,26 @@
 package br.com.infogomes.financialcontrol.entities;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.util.Set;
 
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import br.com.infogomes.financialcontrol.entities.enuns.TipoTransaction;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "tb_transaction")
+@Table(name = "tb_category")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Transaction implements Serializable {
+public class Category implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -33,12 +28,7 @@ public class Transaction implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String description;
-	private BigDecimal transValue;
-	private LocalDate transDate;
-	@Enumerated(EnumType.STRING)
-	private TipoTransaction tipoTransaction;
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "category_id")
-	private Category category;
+	@OneToMany(mappedBy = "category" ,fetch = FetchType.LAZY)
+	private Set<Transaction> transactions;
 
 }
