@@ -95,8 +95,13 @@ public class TransactionService {
 	}
 
 	public List<Transaction> findExpensesByDescriptionContaining(String description) {
-		return repository.findExpensesByDescriptionContainingAndTipoTransactionEquals(description,
+		return repository.findByDescriptionContainingAndTipoTransactionEquals(description,
 				TipoTransaction.EXPENSE);
+	}
+
+	public List<Transaction> findIncomesByDescriptionContaining(String description) {
+		return repository.findByDescriptionContainingAndTipoTransactionEquals(description,
+				TipoTransaction.INCOME);
 	}
 
 }

@@ -18,9 +18,8 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
 	boolean existsByDescriptionIgnoreCaseAndTransDateGreaterThanEqualAndTransDateLessThan(String description,
 			LocalDate startDate, LocalDate endDate);
 
-	List<Transaction> findExpensesByDescriptionContainingAndTipoTransactionEquals(String description,
-			TipoTransaction expense);
-
 	Optional<Transaction> findByIdAndTipoTransactionEquals(Long id, TipoTransaction expense);
+
+	List<Transaction> findByDescriptionContainingAndTipoTransactionEquals(String description, TipoTransaction income);
 
 }

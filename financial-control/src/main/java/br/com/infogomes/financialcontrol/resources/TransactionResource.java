@@ -58,6 +58,18 @@ public class TransactionResource {
 		BeanUtils.copyProperties(obj, dto);
 		return ResponseEntity.ok().body(dto);
 	}
+	
+	@GetMapping(value = "incomes", params = "description")
+	public ResponseEntity<List<TransactionDTO>> findIncomesByDescription(
+			@RequestParam(name = "description") String description) {
+		List<Transaction> list = service.findIncomesByDescriptionContaining(description);
+		List<TransactionDTO> listDto = list.stream().map(obj -> {
+			var dto = new TransactionDTO();
+			BeanUtils.copyProperties(obj, dto);
+			return dto;
+		}).collect(Collectors.toList());
+		return ResponseEntity.ok().body(listDto);
+	}
 
 	@PutMapping(value = "incomes/{id}")
 	public ResponseEntity<Void> updateIncome(@Valid @RequestBody TransactionDTO objDto, @PathVariable Long id) {
