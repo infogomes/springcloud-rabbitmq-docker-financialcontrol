@@ -8,6 +8,10 @@ import javax.validation.Valid;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -58,7 +62,7 @@ public class TransactionResource {
 		BeanUtils.copyProperties(obj, dto);
 		return ResponseEntity.ok().body(dto);
 	}
-	
+
 	@GetMapping(value = "incomes", params = "description")
 	public ResponseEntity<List<TransactionDTO>> findIncomesByDescription(
 			@RequestParam(name = "description") String description) {
@@ -68,6 +72,19 @@ public class TransactionResource {
 			BeanUtils.copyProperties(obj, dto);
 			return dto;
 		}).collect(Collectors.toList());
+		return ResponseEntity.ok().body(listDto);
+	}
+
+	@GetMapping(value = "incomes/{year}/{month}")
+	public ResponseEntity<Page<TransactionDTO>> findIncomesByMonth(@PathVariable Integer year,
+			@PathVariable Integer month,
+			@PageableDefault(sort = "transDate", direction = Direction.ASC, value = 10) Pageable pageable) {
+		Page<Transaction> list = service.findIncomesByMonthAndYearPage(year, month, pageable);
+		Page<TransactionDTO> listDto = list.map(obj -> {
+			var dto = new TransactionDTO();
+			BeanUtils.copyProperties(obj, dto);
+			return dto;
+		});
 		return ResponseEntity.ok().body(listDto);
 	}
 
@@ -106,6 +123,19 @@ public class TransactionResource {
 			BeanUtils.copyProperties(obj, dto);
 			return dto;
 		}).collect(Collectors.toList());
+		return ResponseEntity.ok().body(listDto);
+	}
+	
+	@GetMapping(value = "expenses/{year}/{month}")
+	public ResponseEntity<Page<TransactionDTO>> findExpensesByMonth(@PathVariable Integer year,
+			@PathVariable Integer month,
+			@PageableDefault(sort = "transDate", direction = Direction.ASC, value = 10) Pageable pageable) {
+		Page<Transaction> list = service.findExpensesByMonthAndYearPage(year, month, pageable);
+		Page<TransactionDTO> listDto = list.map(obj -> {
+			var dto = new TransactionDTO();
+			BeanUtils.copyProperties(obj, dto);
+			return dto;
+		});
 		return ResponseEntity.ok().body(listDto);
 	}
 

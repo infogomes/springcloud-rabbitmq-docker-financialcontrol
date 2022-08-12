@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -21,5 +23,8 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
 	Optional<Transaction> findByIdAndTipoTransactionEquals(Long id, TipoTransaction expense);
 
 	List<Transaction> findByDescriptionContainingAndTipoTransactionEquals(String description, TipoTransaction income);
+
+	Page<Transaction> findByTipoTransactionEqualsAndTransDateGreaterThanEqualAndTransDateLessThan(
+			TipoTransaction income, LocalDate of, LocalDate of2, Pageable pageable);
 
 }
