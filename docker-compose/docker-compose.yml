@@ -7,9 +7,9 @@ services:
     image: postgres
     restart: always
     environment:
-      POSTGRES_PASSWORD: fincontpass
-      POSTGRES_USER: fincontuser
-      POSTGRES_DB: fincontrol
+      POSTGRES_PASSWORD: infogomes
+      POSTGRES_USER: infogomes
+      POSTGRES_DB: infogomes
     ports:
       - 5432:5432  
 

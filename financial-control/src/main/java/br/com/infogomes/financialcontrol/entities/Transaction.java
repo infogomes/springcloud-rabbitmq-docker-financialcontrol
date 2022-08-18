@@ -14,6 +14,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.Length;
 
 import br.com.infogomes.financialcontrol.entities.enuns.TipoTransaction;
 import lombok.AllArgsConstructor;
@@ -32,11 +36,21 @@ public class Transaction implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+
+	@NotEmpty(message = "Preenchimento obrigatório")
+	@Length(min = 5, max = 80, message = "O tamanho deve ser entre 5 e 80 caracteres")
 	private String description;
+
+	@NotNull(message = "Preenchimento obrigatório")
 	private BigDecimal transValue;
+
+	@NotNull(message = "Preenchimento obrigatório")
 	private LocalDate transDate;
+
 	@Enumerated(EnumType.STRING)
+	@NotNull(message = "Preenchimento obrigatório")
 	private TipoTransaction tipoTransaction;
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "category_id")
 	private Category category;
